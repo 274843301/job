@@ -21,10 +21,12 @@ public class Job51ResumeParser extends AbstractResumeParser implements ResumePar
 
   @Override
   public boolean canParse(File file) {
-    return file == null 
-        ? false 
-        : (file.getName().startsWith("51job") 
-            || file.getName().startsWith("(51job.com)"));
+    if(file == null) {
+      return false;
+    } else {
+      String name = file.getName();
+      return name.contains("51job") || name.startsWith("前程无忧-");
+    }
   }
 
   @Override
@@ -36,7 +38,7 @@ public class Job51ResumeParser extends AbstractResumeParser implements ResumePar
     // String name = doc.select("table table table tr span").first().text();
     // resume.set(KEY_NAME, name);
     String fileName = file.getName();
-    if(fileName.startsWith("51job")) {
+    if(fileName.startsWith("51job_")) {
       fileName = fileName.substring("51job_".length());
       resume.set(KEY_NAME, fileName.substring(0, fileName.indexOf("_")));
     } else {

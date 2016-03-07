@@ -99,7 +99,8 @@ public class LagouResumeParser extends AbstractResumeParser implements ResumePar
     
     String next = null;
     
-    for(String str : values) {
+    for(String value : values) {
+      String str = value.trim();
       if(str.contains("工作经验")) {
         resume.setWorkDuration(str);  
         next = "城市";
