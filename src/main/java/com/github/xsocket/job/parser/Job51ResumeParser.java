@@ -56,7 +56,12 @@ public class Job51ResumeParser extends AbstractResumeParser implements ResumePar
     String[] ds = detail.replaceAll("\\|", " ~!~ ").split("~!~");
     for(String str : ds) {
       if(str.contains("工作经验")) {
-        resume.set(KEY_WORK_DURATION, str);        
+        int index = str.indexOf("年");
+        if(index > 0) {
+          resume.set(KEY_WORK_DURATION, str.substring(0, index));
+        } else {
+          resume.set(KEY_WORK_DURATION, str.substring(0, str.indexOf("工作经验")));
+        }        
       } else if(str.contains("岁")) {
         int index = str.indexOf("岁");
         resume.set(KEY_AGE, str.substring(0, index));

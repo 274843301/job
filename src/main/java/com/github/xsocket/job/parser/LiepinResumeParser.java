@@ -2,6 +2,7 @@ package com.github.xsocket.job.parser;
 
 import static com.github.xsocket.job.resume.LiepinResume.KEY_JOB;
 import static com.github.xsocket.job.resume.LiepinResume.KEY_WORDS;
+import static com.github.xsocket.job.resume.LiepinResume.KEY_WORK_DURATION;
 
 import java.io.File;
 
@@ -43,6 +44,12 @@ public class LiepinResumeParser extends AbstractResumeParser implements ResumePa
       } else if(text.startsWith(KEY_JOB)) {
         resume.set(KEY_JOB, intercept(text, KEY_JOB, " | "));
       }
+    }
+    
+    // 后续处理
+    String workDuration = resume.getWorkDuration();
+    if(workDuration != null && workDuration.contains("年")) {
+      resume.set(KEY_WORK_DURATION, workDuration.substring(0, workDuration.indexOf("年")).trim());
     }
     
     return resume;

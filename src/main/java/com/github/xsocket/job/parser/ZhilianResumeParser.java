@@ -62,7 +62,12 @@ public class ZhilianResumeParser extends AbstractResumeParser implements ResumeP
         resume.setAge(info.substring(0, index));
         resume.setBirthday(trim(info.substring(index + 1), "(",")","（","）"));
       } else if(info.contains("工作经验")) {
-        resume.setWorkDuration(info);     
+        int index = info.indexOf("年");
+        if(index > 0) {
+          resume.setWorkDuration(info.substring(0, index));
+        } else {
+          resume.setWorkDuration(info.substring(0, info.indexOf("工作经验")));
+        }   
       } else if(info.contains("现居住地：")) {
         resume.setEducation(intercept(info, null, "现居住地："));
         resume.setCity(intercept(info, "现居住地：", "|"));
