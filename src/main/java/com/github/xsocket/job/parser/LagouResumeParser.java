@@ -1,6 +1,7 @@
 package com.github.xsocket.job.parser;
 
 import java.io.File;
+import java.util.Calendar;
 
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
@@ -50,32 +51,84 @@ public class LagouResumeParser extends AbstractResumeParser implements ResumePar
     男 ︳硕士 ︳ 6年工作经验 ︳ 北京
     18612119582 ︳botaoluo@gmail.com
     
+    
+    教育经历
+    中软培训中心 
+    
+    其他  ·   java培训
+    2009年毕业 
+    
+    
+    辽宁工程技术大学
+    
+    本科 · 计算机科学与技术
+    2005年毕业 
+    
          */
     LagouResume resume = new LagouResume();
     Elements sections = doc.getElementsByTag("p");
-    boolean started = false;
-    
+    boolean startedBasic = false;
+    boolean startEducation = false;
+    String nextEducation = null;
     for(Element section : sections) {
       String text = section.text(); 
-      // 空字符串的话判断是否结束
       if(isNullOrEmpty(text)) {
-        if(started) {
-          break;
-        } else {
-          continue;
-        }
+        continue;
       }
       
-      if(!started) {
+      if(!startedBasic) {
         // 第一个还未开始的非空字符串是：姓名
         resume.setName(text);
-        started = true;
-      } else {
+        startedBasic = true;
+      } else if("教育经历".equals(text)) {
+        startEducation = true;
+        nextEducation = "学校";
+      } else if(!startEducation) {
         if(text.contains(JOB_COMPANY_SPLIT)) {
           parseJobAndCompany(resume, text);
         } else if(text.indexOf(BASIC_INFO_SPLIT) > 0) {
           // 其他基本信息
           parsePersonalInfo(resume, text);
+        }
+      } else if(startEducation) {
+        // 解析教育经历
+        if("学校".equals(nextEducation)) {
+          resume.setSchool(text);
+          nextEducation = "学历";
+        } else if("学历".equals(nextEducation)) {
+          int index = text.indexOf(JOB_COMPANY_SPLIT);
+          if(index > 0) {
+            String edu = text.substring(0, index).trim();
+            for(String e : EDUCATIONS.keySet()) {
+              if(edu.startsWith(e)) {
+                edu = e;
+                break;
+              }
+            }
+            resume.setEducation(edu);
+          } else {
+            resume.setEducation("");
+          }
+          nextEducation = "毕业时间";
+        } else if("毕业时间".equals(nextEducation)) {
+          if(EDUCATIONS.containsKey(resume.getEducation())) {
+            // 解析成功则退出
+            int index = text.indexOf("年");
+            if(index > 0) {
+              try {
+                // 解析毕业年份
+                int end = Integer.parseInt(text.substring(0, index));
+                Integer age = Calendar.getInstance().get(Calendar.YEAR) - end + EDUCATIONS.get(resume.getEducation());
+                resume.setAge(age.toString());
+              } catch(Exception e) {}
+            }            
+            break;
+          } 
+          
+          resume.setSchool("");
+          resume.setEducation("");
+          resume.setAge("");
+          nextEducation = "学校";
         }
       }
     }
@@ -106,7 +159,12 @@ public class LagouResumeParser extends AbstractResumeParser implements ResumePar
     for(String value : values) {
       String str = value.trim();
       if(str.contains("工作经验")) {
-        resume.setWorkDuration(str);  
+        int index = str.indexOf("年");
+        if(index > 0) {
+          resume.setWorkDuration(str.substring(0, index));
+        } else {
+          resume.setWorkDuration(str.substring(0, str.indexOf("工作经验")));
+        }
         next = "城市";
       } else if(str.contains("男")) {
         resume.setSex("男");

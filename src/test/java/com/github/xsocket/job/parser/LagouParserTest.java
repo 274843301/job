@@ -14,9 +14,11 @@ public class LagouParserTest {
 
   @Test
   public void testLagou() throws Exception {
-    URL url = LagouParserTest.class.getResource("/lagou5.doc");
-    
-    System.out.println("男 ︳硕士 ︳ 6年工作经验 ︳ 北京".indexOf("︳"));
+    URL url = LagouParserTest.class.getResource("/lagou1.doc");
+  //  String[] strs = "男 ︳本科 ︳  ︳ 北京".split("︳");
+  //  for(String str : strs) {
+    //  System.out.println(str);
+  //  }
 
     String html = WordUtils.parseDoc2Html(url.openStream());
     //System.out.println(html);

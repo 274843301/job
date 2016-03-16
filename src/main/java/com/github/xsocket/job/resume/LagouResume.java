@@ -31,6 +31,10 @@ public class LagouResume extends AbstractResume implements Resume {
 
   protected String mail;
   
+  protected String school;
+  
+  protected String age;
+  
 
   @Override
   public String getSource() {
@@ -107,6 +111,22 @@ public class LagouResume extends AbstractResume implements Resume {
 
   public void setMail(String mail) {
     this.mail = mail;
+  }
+
+  public String getSchool() {
+    return school;
+  }
+
+  public void setSchool(String school) {
+    this.school = school;
+  }
+
+  public String getAge() {
+    return age;
+  }
+
+  public void setAge(String age) {
+    this.age = age;
   }
   
   
