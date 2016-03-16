@@ -1,16 +1,17 @@
 package com.github.xsocket.job;
 
-import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.Map;
 
 public abstract class AbstractResumeParser implements ResumeParser {
   
   // 通过教育经历来判断年龄
-  protected static Map<String, Integer> EDUCATIONS = new HashMap<String, Integer>();
+  protected static Map<String, Integer> EDUCATIONS = new LinkedHashMap<String, Integer>();
   static {
-    EDUCATIONS.put("本科", new Integer(23));
-    EDUCATIONS.put("硕士", new Integer(26));
+    // 使用LinkedHashMap 保持顺序
     EDUCATIONS.put("博士", new Integer(30));
+    EDUCATIONS.put("硕士", new Integer(26));
+    EDUCATIONS.put("本科", new Integer(23));
     EDUCATIONS.put("大专", new Integer(22));
     EDUCATIONS.put("高中", new Integer(19));
   }

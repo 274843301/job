@@ -32,6 +32,26 @@ public class ZhilianResume extends AbstractResume implements Resume {
   protected String age;
   
   protected String birthday;
+  
+  protected String company;
+  
+  protected String school;
+
+  public String getSchool() {
+    return school;
+  }
+
+  public void setSchool(String school) {
+    this.school = school;
+  }
+
+  public String getCompany() {
+    return company;
+  }
+
+  public void setCompany(String company) {
+    this.company = company;
+  }
 
   @Override
   public String getSource() {

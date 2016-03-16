@@ -17,7 +17,12 @@ public class ZhilianResumeParser extends AbstractResumeParser implements ResumeP
 
   @Override
   public boolean canParse(File file) {
-    return file == null ? false : file.getName().startsWith("智联招聘");
+    if(file == null) {
+      return false;
+    } else {
+      String name = file.getName();
+      return name.startsWith("智联招聘") && name.endsWith(".doc");
+    }
   }
 
   @Override

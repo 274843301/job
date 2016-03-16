@@ -15,6 +15,7 @@ import org.apache.commons.io.FilenameUtils;
 import com.github.xsocket.job.parser.Job51ResumeParser;
 import com.github.xsocket.job.parser.LagouResumeParser;
 import com.github.xsocket.job.parser.LiepinResumeParser;
+import com.github.xsocket.job.parser.ZhilianEmailResumeParser;
 import com.github.xsocket.job.parser.ZhilianResumeParser;
 import com.github.xsocket.job.util.ExcelUtils;
 
@@ -31,6 +32,7 @@ public class Main {
     PARSERS.add(new Job51ResumeParser());
     PARSERS.add(new LiepinResumeParser());
     PARSERS.add(new ZhilianResumeParser());
+    PARSERS.add(new ZhilianEmailResumeParser());
   }
 
   public static void main(String[] args) {
@@ -189,6 +191,7 @@ public class Main {
     sb.append("城市：").append(resume.getCity()).append("\n\t");
     sb.append("地址：").append(resume.getAddress()).append("\n\t");
     sb.append("学历：").append(resume.getEducation()).append("\n\t");
+    sb.append("学校：").append(resume.getSchool()).append("\n\t");
     sb.append("经验：").append(resume.getWorkDuration()).append("\n\t");
     
     sb.append("工作：").append(resume.getJob()).append("\n\t");
