@@ -34,7 +34,7 @@ public class LagouResume extends AbstractResume implements Resume {
 
   @Override
   public String getSource() {
-    return "拉钩";
+    return "拉勾";
   }
 
   public String getName() {

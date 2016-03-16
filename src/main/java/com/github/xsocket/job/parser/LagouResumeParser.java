@@ -29,13 +29,17 @@ public class LagouResumeParser extends AbstractResumeParser implements ResumePar
       return false;
     } else {
       String name = file.getName();
-      return name.endsWith("的简历.doc") || (name.startsWith("拉钩-") && name.endsWith(".doc"));
+      return name.endsWith("的简历.doc") || (name.startsWith("拉勾-") && name.endsWith(".doc"));
     }
   }
 
   @Override
   public Resume parse(File file) throws Exception {
-    String html = WordUtils.parseDoc2Html(file);
+    String os = System.getProperty("os.name");
+    
+    String html = WordUtils.parseDoc2Html(file, os.startsWith("Windows") ? "GBK" : "UTF-8");
+    //String html = WordUtils.parseDoc2Html(file);
+    
     Document doc = Jsoup.parse(html);
     
     /*
@@ -52,7 +56,7 @@ public class LagouResumeParser extends AbstractResumeParser implements ResumePar
     boolean started = false;
     
     for(Element section : sections) {
-      String text = section.text();
+      String text = section.text(); 
       // 空字符串的话判断是否结束
       if(isNullOrEmpty(text)) {
         if(started) {
