@@ -14,8 +14,9 @@ import com.github.xsocket.job.Resume;
 public class ExcelUtils {
   
   private static final String[] HEADERS = new String[]{
-      "序号", "渠道", "姓名", "性别", "年龄", "生日", "电话", "邮箱",
-      "居住城市", "地址", "学历", "工作经验", "申请职位", "现工作单位" 
+      "序号", "姓名", "应聘职位", "简历来源",       "毕业院校", 
+      "学历", "年龄", "工龄",    "最后一家工作单位", "联系方式", 
+      "邮箱", "性别", "生日",    "居住城市",       "地址"  
   };
 
   public static void outputResumeProcessResult(Map<File, Resume> map, File outFile) throws IOException {
@@ -38,19 +39,20 @@ public class ExcelUtils {
         Resume resume = entry.getValue();
         HSSFRow row = sheet.createRow(rowNum);
         row.createCell(0).setCellValue(rowNum);                    // 序号
-        row.createCell(1).setCellValue(resume.getSource());        // 简历来源
-        row.createCell(2).setCellValue(resume.getName());          // 姓名
-        row.createCell(3).setCellValue(resume.getSex());           // 性别
-        row.createCell(4).setCellValue(resume.getAge());           // 年龄
-        row.createCell(5).setCellValue(resume.getBirthday());      // 生日
-        row.createCell(6).setCellValue(resume.getPhone());         // 电话
-        row.createCell(7).setCellValue(resume.getMail());          // 邮箱
-        row.createCell(8).setCellValue(resume.getCity());          // 居住城市
-        row.createCell(9).setCellValue(resume.getAddress());       // 地址
-        row.createCell(10).setCellValue(resume.getEducation());    // 学历
-        row.createCell(11).setCellValue(resume.getWorkDuration()); // 工作经验
-        row.createCell(12).setCellValue(resume.getJob());          // 申请职位
-        row.createCell(13).setCellValue(resume.getCompany());      // 现工作单位
+        row.createCell(1).setCellValue(resume.getName());          // 姓名
+        row.createCell(2).setCellValue(resume.getJob());          // 应聘职位
+        row.createCell(3).setCellValue(resume.getSource());        // 简历来源
+        row.createCell(4).setCellValue(resume.getSchool());        // 毕业院校
+        row.createCell(5).setCellValue(resume.getEducation());    // 学历
+        row.createCell(6).setCellValue(resume.getAge());           // 年龄
+        row.createCell(7).setCellValue(resume.getWorkDuration()); // 工作经验
+        row.createCell(8).setCellValue(resume.getCompany());      // 现工作单位
+        row.createCell(9).setCellValue(resume.getPhone());         // 电话
+        row.createCell(10).setCellValue(resume.getMail());          // 邮箱
+        row.createCell(11).setCellValue(resume.getSex());           // 性别
+        row.createCell(12).setCellValue(resume.getBirthday());      // 生日
+        row.createCell(13).setCellValue(resume.getCity());          // 居住城市
+        row.createCell(14).setCellValue(resume.getAddress());       // 地址
         rowNum++;
       }
       excel.write(fileoutputstream);

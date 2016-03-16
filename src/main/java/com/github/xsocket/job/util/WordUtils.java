@@ -43,6 +43,7 @@ public class WordUtils {
       DOMSource domSource = new DOMSource(converter.getDocument());
       StreamResult streamResult = new StreamResult(output);
       Transformer serializer = TransformerFactory.newInstance().newTransformer();
+      // TODO 有乱码
       serializer.setOutputProperty(OutputKeys.ENCODING, charset);
       serializer.setOutputProperty(OutputKeys.INDENT, "yes");
       serializer.setOutputProperty(OutputKeys.METHOD, "html");
