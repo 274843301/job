@@ -37,8 +37,6 @@ public class Main {
     PARSERS.add(ZL_PARSER);
   }
   
-  
-
   public static void main(String[] args) {
     String date = new SimpleDateFormat("yyyy年MM月dd日HH点mm分ss秒").format(new Date());
     System.err.println();
@@ -168,23 +166,27 @@ public class Main {
       System.out.println("尝试以拉勾网简历模板去解析...");
       try {
         Resume resume = LAGOU_PARSER.parse(file);
-        if(resume != null) {
+        if(resume != null && resume.getName() != null && resume.getPhone() != null) {
           System.out.println("简历解析取得成功！");
           return resume;
+        } else {
+          System.out.println("解析失败，该简历不是拉勾网简历...");
         }
       } catch (Exception e) {
-        System.out.println("解析失败，该简历不是拉勾网简历...");        
+        System.out.println("解析失败，无法正确获取简历内容！");        
       }
     } else if(filename.endsWith(".eml")){
       System.out.println("尝试以智联招聘简历模板去解析...");
       try {
         Resume resume = ZL_PARSER.parse(file);
-        if(resume != null) {
+        if(resume != null && resume.getName() != null && resume.getPhone() != null) {
           System.out.println("简历解析取得成功！");
           return resume;
+        } else {
+          System.out.println("解析失败，该简历不是智联招聘简历...");
         }
       } catch (Exception e) {
-        System.out.println("解析失败，该简历不是智联招聘简历...");        
+        System.out.println("解析失败，无法正确获取简历内容！");        
       }
     }
     
@@ -194,19 +196,24 @@ public class Main {
   /** 获取简历所在目录 */
   private static File getResumeFolder() {
     String dir = System.getProperty("job.resume.dir");
-    return new File(dir == null || dir.length() == 0 ? "未处理简历" : dir);
+    return mkdir(new File(dir == null || dir.length() == 0 ? "未处理简历" : dir));
   }
   
   /** 获取简历转移目录 */
   private static File getOutputFolder() {
     String dir = System.getProperty("job.output.dir");
-    return new File(dir == null || dir.length() == 0 ? "已处理简历" : dir);
+    return mkdir(new File(dir == null || dir.length() == 0 ? "已处理简历" : dir));
   }
   
   /** 获取结果输出Excel所在目录 */
   private static File getExcelFolder() {
     String dir = System.getProperty("job.excel.dir");
-    return new File(dir == null || dir.length() == 0 ? "处理结果" : dir);
+    return mkdir(new File(dir == null || dir.length() == 0 ? "处理结果" : dir));
+  }
+  
+  private static File mkdir(File dir) {
+    dir.mkdirs();
+    return dir;
   }
   
   private static void printResume(Resume resume) {
