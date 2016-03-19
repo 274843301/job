@@ -10,6 +10,7 @@ import javax.mail.Multipart;
 import javax.mail.Session;
 import javax.mail.internet.MimeMessage;
 
+import org.apache.http.client.fluent.Request;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
@@ -119,7 +120,34 @@ public class ZhilianEmailResumeParser extends AbstractResumeParser implements Re
       }
     }
     
+    tryFetchContact(resume, doc);
+    
     return resume;
+  }
+  
+  protected void tryFetchContact(ZhilianResume resume, Document doc) {
+    final String SPLIT1 = "url=";
+    final String SPLIT2 = "ldparam=";
+    Elements as = doc.select("table table table table tr td a"); 
+    for(Element elem : as) {
+      String href = elem.attr("href");
+      if(href.contains(SPLIT2) && href.contains(SPLIT1)) {
+        String url = href.substring(href.lastIndexOf(SPLIT1) + SPLIT1.length(), href.length());
+        String content;
+        try {
+          content = Request.Get(url).execute().returnContent().asString();
+          Document doc2 = Jsoup.parse(content);
+          Elements infos = doc2.select("div.login_content p a");
+          resume.setName(infos.get(0).text());
+          resume.setPhone(infos.get(1).text());
+          resume.setMail(infos.get(2).text());
+        } catch (Exception e) {
+          e.printStackTrace(System.err);
+        } 
+        
+        return;
+      }
+    }
   }
   
   protected void parseBasicInfo(ZhilianResume resume, String text) {

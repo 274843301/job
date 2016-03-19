@@ -9,6 +9,7 @@ import javax.mail.Multipart;
 import javax.mail.Session;
 import javax.mail.internet.MimeMessage;
 
+import org.apache.http.client.fluent.Request;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
@@ -45,19 +46,29 @@ public class ZhilianEmailParserTest {
       }
     }
     
+    System.err.println(html);
+    
     Document doc = Jsoup.parse(html);
     Elements trs = doc.select("table table table table tr");
     for(Element elem : trs) {
       System.out.println(elem.text());
     }
     
-    
-    for(String edu : EDUCATIONS.keySet()) {
-      System.err.println(edu);
+    // 联系方式访问连接
+    Elements as = doc.select("table table table table tr td a"); 
+    for(Element elem : as) {
+      System.err.println(elem.attr("href"));
     }
     
-    for(String str : "2014/02 - 至今 辽河油田泰利达有限公司 （1年3个月）".split(" ")) {
-      System.err.println(str);
+    String href = as.get(0).attr("href");
+    final String SPLIT = "url=";
+    String addr = href.substring(href.lastIndexOf(SPLIT) + SPLIT.length(), href.length());
+    
+    String content = Request.Get(addr).execute().returnContent().asString();
+    Document doc2 = Jsoup.parse(content);
+    Elements infos = doc2.select("div.login_content>p");
+    for(Element elem : infos) {
+      System.out.println(elem.text());
     }
     
   }
