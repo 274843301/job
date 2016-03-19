@@ -27,13 +27,17 @@ import com.github.xsocket.job.util.ExcelUtils;
 public class Main {
   
   private static Set<ResumeParser> PARSERS = new HashSet<ResumeParser>();
+  private static ResumeParser LAGOU_PARSER = new LagouResumeParser();
+  private static ResumeParser ZL_PARSER = new ZhilianEmailResumeParser();
   static {
-    PARSERS.add(new LagouResumeParser());
+    PARSERS.add(LAGOU_PARSER);
     PARSERS.add(new Job51ResumeParser());
     PARSERS.add(new LiepinResumeParser());
     PARSERS.add(new ZhilianResumeParser());
-    PARSERS.add(new ZhilianEmailResumeParser());
+    PARSERS.add(ZL_PARSER);
   }
+  
+  
 
   public static void main(String[] args) {
     String date = new SimpleDateFormat("yyyy年MM月dd日HH点mm分ss秒").format(new Date());
@@ -157,7 +161,33 @@ public class Main {
       e.printStackTrace(System.err);
     }
     
-    System.out.println("暂时无法解析简历：《" + file.getName() + "》");
+    String filename = file.getName();
+    System.out.println("暂时无法解析简历：《" + filename + "》");
+    
+    if(filename.endsWith(".doc")) {
+      System.out.println("尝试以拉勾网简历模板去解析...");
+      try {
+        Resume resume = LAGOU_PARSER.parse(file);
+        if(resume != null) {
+          System.out.println("简历解析取得成功！");
+          return resume;
+        }
+      } catch (Exception e) {
+        System.out.println("解析失败，该简历不是拉勾网简历...");        
+      }
+    } else if(filename.endsWith(".eml")){
+      System.out.println("尝试以智联招聘简历模板去解析...");
+      try {
+        Resume resume = ZL_PARSER.parse(file);
+        if(resume != null) {
+          System.out.println("简历解析取得成功！");
+          return resume;
+        }
+      } catch (Exception e) {
+        System.out.println("解析失败，该简历不是智联招聘简历...");        
+      }
+    }
+    
     return null;
   }
   
