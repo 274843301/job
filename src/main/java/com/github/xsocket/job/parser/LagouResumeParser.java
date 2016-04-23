@@ -23,7 +23,12 @@ public class LagouResumeParser extends AbstractResumeParser implements ResumePar
   
   private static final String JOB_COMPANY_SPLIT = "·";
   private static final String BASIC_INFO_SPLIT = "︳";
-
+  
+  @Override
+  public String getName() {
+    return "拉勾";
+  }
+  
   @Override
   public boolean canParse(File file) {
     if(file == null) {

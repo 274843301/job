@@ -160,30 +160,19 @@ public class Main {
     }
     
     String filename = file.getName();
-    System.out.println("暂时无法解析简历：《" + filename + "》");
+    System.out.println("暂时无法解析简历：《" + filename + "》，接下来尝试所有可能的解析方法。");
     
-    if(filename.endsWith(".doc")) {
-      System.out.println("尝试以拉勾网简历模板去解析...");
+    // 未正确解析，尝试遍历所有的解析方式
+    for(ResumeParser parser : PARSERS) {
+      String parserName = parser.getName();
+      System.out.println("尝试以" + parserName + "简历去解析...");
       try {
-        Resume resume = LAGOU_PARSER.parse(file);
+        Resume resume = parser.parse(file);
         if(resume != null && resume.getName() != null && resume.getPhone() != null) {
           System.out.println("简历解析取得成功！");
           return resume;
         } else {
-          System.out.println("解析失败，该简历不是拉勾网简历...");
-        }
-      } catch (Exception e) {
-        System.out.println("解析失败，无法正确获取简历内容！");        
-      }
-    } else if(filename.endsWith(".eml")){
-      System.out.println("尝试以智联招聘简历模板去解析...");
-      try {
-        Resume resume = ZL_PARSER.parse(file);
-        if(resume != null && resume.getName() != null && resume.getPhone() != null) {
-          System.out.println("简历解析取得成功！");
-          return resume;
-        } else {
-          System.out.println("解析失败，该简历不是智联招聘简历...");
+          System.out.println("解析失败，该简历不是" + parserName + "简历...");
         }
       } catch (Exception e) {
         System.out.println("解析失败，无法正确获取简历内容！");        

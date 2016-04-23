@@ -20,6 +20,11 @@ import com.github.xsocket.job.resume.LiepinResume;
 public class LiepinResumeParser extends AbstractResumeParser implements ResumeParser {
 
   @Override
+  public String getName() {
+    return "猎聘网";
+  }
+  
+  @Override
   public boolean canParse(File file) {
     return file == null ? false : file.getName().contains("猎聘网") ;
   }

@@ -9,6 +9,8 @@ import java.io.File;
  *
  */
 public interface ResumeParser {
+  
+  String getName();
 
   boolean canParse(File file);
   

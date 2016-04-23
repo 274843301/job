@@ -16,6 +16,11 @@ import com.github.xsocket.job.resume.ZhilianResume;
 public class ZhilianResumeParser extends AbstractResumeParser implements ResumeParser {
 
   @Override
+  public String getName() {
+    return "智联招聘";
+  }
+  
+  @Override
   public boolean canParse(File file) {
     if(file == null) {
       return false;

@@ -31,6 +31,11 @@ import com.github.xsocket.job.ResumeParser;
 import com.github.xsocket.job.resume.Job51Resume;
 
 public class Job51ResumeParser extends AbstractResumeParser implements ResumeParser {
+  
+  @Override
+  public String getName() {
+    return "前程无忧";
+  }
 
   @Override
   public boolean canParse(File file) {

@@ -32,6 +32,11 @@ public class ZhilianEmailResumeParser extends AbstractResumeParser implements Re
   private static final String BASIC_INFO_SPLIT = "\\|";
 
   @Override
+  public String getName() {
+    return "智联招聘(邮件)";
+  }
+  
+  @Override
   public boolean canParse(File file) {
     if(file == null) {
       return false;
