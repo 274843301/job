@@ -1,9 +1,22 @@
 package com.github.xsocket.job.parser;
 
-import static com.github.xsocket.job.resume.Job51Resume.*;
+import static com.github.xsocket.job.resume.Job51Resume.KEY_AGE;
+import static com.github.xsocket.job.resume.Job51Resume.KEY_BIRTHDAY;
+import static com.github.xsocket.job.resume.Job51Resume.KEY_JOB;
+import static com.github.xsocket.job.resume.Job51Resume.KEY_NAME;
+import static com.github.xsocket.job.resume.Job51Resume.KEY_SEX;
+import static com.github.xsocket.job.resume.Job51Resume.KEY_WORDS;
+import static com.github.xsocket.job.resume.Job51Resume.KEY_WORK_DURATION;
 
 import java.io.File;
+import java.io.FileInputStream;
+import java.io.InputStream;
 import java.util.List;
+
+import javax.mail.BodyPart;
+import javax.mail.Multipart;
+import javax.mail.Session;
+import javax.mail.internet.MimeMessage;
 
 import org.apache.commons.codec.binary.Base64;
 import org.apache.commons.io.FileUtils;
@@ -31,7 +44,10 @@ public class Job51ResumeParser extends AbstractResumeParser implements ResumePar
 
   @Override
   public Resume parse(File file) throws Exception {    
-    Document doc = parse2Html(file);    
+    Document doc = parse2HtmlAsMail(file);
+    if(doc == null) {
+      doc = parse2Html(file);
+    }
     Job51Resume resume = new Job51Resume();
 
     // 应聘人姓名
@@ -126,5 +142,43 @@ public class Job51ResumeParser extends AbstractResumeParser implements ResumePar
     String html = new String(Base64.decodeBase64(sb.toString()), charset);
     return Jsoup.parse(html);
   }
+  
+  protected Document parse2HtmlAsMail(File file) throws Exception {
+    InputStream in = new FileInputStream(file);
+
+    Session mailSession = Session.getDefaultInstance(System.getProperties(), null);
+
+    MimeMessage msg = new MimeMessage(mailSession, in);
+    
+    Multipart part = (Multipart) msg.getContent();
+    String html = null;
+    for(int i = 0; i < part.getCount(); i++) {
+      html = parseHtml(part.getBodyPart(i));
+      if(html != null) {
+        break;
+      }
+    }
+    in.close();
+    return html == null ? null : Jsoup.parse(html);
+  }
+  
+  private String parseHtml(BodyPart body) throws Exception {
+    //System.err.println(body.getContentType());
+    if(body.getContentType().startsWith("text/html")) {
+      Object content = body.getContent();
+      return content == null ? null : content.toString();
+    } else if(body.getContentType().startsWith("multipart")) {
+      Multipart subpart = (Multipart) body.getContent();
+      for(int j = 0; j < subpart.getCount(); j++) {
+        BodyPart subbody = subpart.getBodyPart(j);
+        String html = parseHtml(subbody);
+        if(html != null) {
+          return html;
+        }
+      }
+    }
+    return null;
+  }
+  
 
 }

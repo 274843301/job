@@ -214,7 +214,7 @@ public class ZhilianEmailResumeParser extends AbstractResumeParser implements Re
         break;
       }
     }
-    
+    in.close();
     return Jsoup.parse(html);
   }
 }
