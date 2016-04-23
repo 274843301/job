@@ -86,7 +86,7 @@ public class LagouResumeParser extends AbstractResumeParser implements ResumePar
       } else if(!startEducation) {
         if(text.contains(JOB_COMPANY_SPLIT)) {
           parseJobAndCompany(resume, text);
-        } else if(text.indexOf(BASIC_INFO_SPLIT) > 0) {
+        } else if(text.indexOf(BASIC_INFO_SPLIT) >= 0) {
           // 其他基本信息
           parsePersonalInfo(resume, text);
         }
@@ -111,6 +111,11 @@ public class LagouResumeParser extends AbstractResumeParser implements ResumePar
           }
           nextEducation = "毕业时间";
         } else if("毕业时间".equals(nextEducation)) {
+          if(resume.getSchool() != null && !EDUCATIONS.containsKey(resume.getEducation())) {
+            // 学历未设置的情况，假设是本科
+            resume.setEducation("本科");
+          }
+          
           if(EDUCATIONS.containsKey(resume.getEducation())) {
             // 解析成功则退出
             int index = text.indexOf("年");
@@ -121,7 +126,7 @@ public class LagouResumeParser extends AbstractResumeParser implements ResumePar
                 Integer age = Calendar.getInstance().get(Calendar.YEAR) - end + EDUCATIONS.get(resume.getEducation());
                 resume.setAge(age.toString());
               } catch(Exception e) {}
-            }            
+            }
             break;
           } 
           
@@ -165,6 +170,9 @@ public class LagouResumeParser extends AbstractResumeParser implements ResumePar
         } else {
           resume.setWorkDuration(str.substring(0, str.indexOf("工作经验")));
         }
+        next = "城市";
+      } else if(str.contains("应届")) {
+        resume.setWorkDuration("0");
         next = "城市";
       } else if(str.contains("男")) {
         resume.setSex("男");

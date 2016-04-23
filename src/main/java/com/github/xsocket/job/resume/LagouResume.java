@@ -19,7 +19,7 @@ public class LagouResume extends AbstractResume implements Resume {
 
   protected String company;
 
-  protected String sex;
+  protected String sex = "男";
 
   protected String education;
 
