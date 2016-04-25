@@ -1,6 +1,7 @@
 package com.github.xsocket.job.parser;
 
 import static com.github.xsocket.job.resume.LiepinResume.KEY_JOB;
+import static com.github.xsocket.job.resume.LiepinResume.KEY_SCHOOL;
 import static com.github.xsocket.job.resume.LiepinResume.KEY_WORDS;
 import static com.github.xsocket.job.resume.LiepinResume.KEY_WORK_DURATION;
 
@@ -38,16 +39,22 @@ public class LiepinResumeParser extends AbstractResumeParser implements ResumePa
     
     String currentKeyWord = null;
     Elements elems = doc.select("table td");
-    for(Element elem : elems) {
+    for(Element elem : elems) {      
       String text = elem.text();
-      
+      System.err.println(text);
       if(KEY_WORDS.contains(text)) {
         currentKeyWord = text;
       } else if(currentKeyWord != null) {
-        resume.set(currentKeyWord, text);
+        if(currentKeyWord.equals(KEY_SCHOOL)) {
+          int index = text.indexOf(" ");
+          resume.set(KEY_SCHOOL, index > 0 ? text.substring(0, index) : text);
+        } else {
+          resume.set(currentKeyWord, text);
+        }
         currentKeyWord = null;
       } else if(text.startsWith(KEY_JOB)) {
-        resume.set(KEY_JOB, intercept(text, KEY_JOB, " | "));
+        String job = intercept(text, KEY_JOB, " | ");
+        resume.set(KEY_JOB, (job.startsWith(":") || job.startsWith("：")) ? job.substring(1) : job);
       }
     }
     
@@ -60,8 +67,8 @@ public class LiepinResumeParser extends AbstractResumeParser implements ResumePa
     return resume;
   }
   
-  protected Document parse2Html(File file) throws Exception {
-    String html = FileUtils.readFileToString(file, "unicode");
+  protected Document parse2Html(File file) throws Exception {  
+    String html = FileUtils.readFileToString(file, "utf-8");
     return Jsoup.parse(html);
   }
 

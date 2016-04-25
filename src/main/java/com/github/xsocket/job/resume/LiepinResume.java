@@ -19,7 +19,7 @@ public class LiepinResume extends AbstractResume implements Resume {
   
   public static final Set<String> KEY_WORDS = new HashSet<String>();
   
-  public static final String KEY_JOB = "主动应聘职位：";
+  public static final String KEY_JOB = "主动应聘职位";
   public static final String KEY_NAME = "姓名：";
   public static final String KEY_WORK_DURATION = "工作年限：";
   public static final String KEY_SEX = "性别：";
@@ -28,6 +28,9 @@ public class LiepinResume extends AbstractResume implements Resume {
   public static final String KEY_PHONE = "手机号码：";
   public static final String KEY_MAIL = "电子邮件：";
   public static final String KEY_EDUCATION = "教育程度：";
+  public static final String KEY_SCHOOL = "教育经历";
+  public static final String KEY_COMPANY = "公司名称：";
+  
   
   static {
     KEY_WORDS.add(KEY_NAME);
@@ -38,6 +41,8 @@ public class LiepinResume extends AbstractResume implements Resume {
     KEY_WORDS.add(KEY_CITY);
     KEY_WORDS.add(KEY_MAIL);
     KEY_WORDS.add(KEY_EDUCATION);
+    KEY_WORDS.add(KEY_SCHOOL);
+    KEY_WORDS.add(KEY_COMPANY);
   }
   
   protected Map<String, String> cache = new HashMap<String, String>();
@@ -85,6 +90,16 @@ public class LiepinResume extends AbstractResume implements Resume {
   @Override
   public String getMail() {
     return cache.get(KEY_MAIL);
+  }
+  
+  @Override
+  public String getSchool() {
+    return cache.get(KEY_SCHOOL);
+  }
+  
+  @Override
+  public String getCompany() {
+    return cache.get(KEY_COMPANY);
   }
   
   @Override

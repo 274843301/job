@@ -23,6 +23,7 @@ public class LiepinParserTest {
     KEY_WORDS.add("年龄：");
     KEY_WORDS.add("电子邮件：");
     KEY_WORDS.add("教育程度：");
+    KEY_WORDS.add("教育经历");
     KEY_WORDS.add("工作年限：");
     KEY_WORDS.add("所在地：");
   }
@@ -36,6 +37,7 @@ public class LiepinParserTest {
     Elements elems = doc.select("table td");
     for(Element elem : elems) {
       String text = elem.text();
+      System.out.println(text);
       if(KEY_WORDS.contains(text)) {
         currentKeyWord = text;
       } else if(currentKeyWord != null) {
@@ -51,11 +53,11 @@ public class LiepinParserTest {
   
   
   private Document parseLiepinResume() throws Exception {
-    URL url = LiepinParserTest.class.getResource("/liepin.doc");
+    URL url = LiepinParserTest.class.getResource("/liepin2.doc");
     
     
     // 解析成功, 开始进行数据读取
-    String html = IOUtils.toString(url.openStream(), "unicode");
+    String html = IOUtils.toString(url.openStream(), "utf-8");
     //System.err.println(html);
     return Jsoup.parse(html);
   }
