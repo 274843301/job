@@ -130,7 +130,7 @@ public class Main {
           .append(resume.getPhone()).append("-")
           .append(resume.getJob())
           .append(".").append(FilenameUtils.getExtension(fileName));
-        String outputName = sb.toString();
+        String outputName = sb.toString().replaceAll("/", "").replaceAll("\\", "");
         try {
           FileUtils.copyFile(file, new File(outputDir, outputName));
           System.out.println("《" + fileName + "》   ===>   《" + outputName + "》" );
