@@ -112,7 +112,7 @@
       </plugin>
       
       <!-- 组装集成 -->
-      <!-- <plugin>
+      <plugin>
         <groupId>org.apache.maven.plugins</groupId>
         <artifactId>maven-assembly-plugin</artifactId>
         <version>2.3</version>
@@ -136,7 +136,7 @@
             </goals>
           </execution>
         </executions>
-      </plugin> -->
+      </plugin>
 
       <!-- 源代码打包插件 -->
       <plugin>

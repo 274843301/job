@@ -41,7 +41,7 @@ public class LiepinResumeParser extends AbstractResumeParser implements ResumePa
     Elements elems = doc.select("table td");
     for(Element elem : elems) {      
       String text = elem.text();
-      System.err.println(text);
+      //System.err.println(text);
       if(KEY_WORDS.contains(text)) {
         currentKeyWord = text;
       } else if(currentKeyWord != null) {
