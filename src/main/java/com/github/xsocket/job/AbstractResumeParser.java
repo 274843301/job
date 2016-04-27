@@ -47,7 +47,7 @@ public abstract class AbstractResumeParser implements ResumeParser {
   }
   
   protected boolean isNullOrEmpty(String text) {
-    return text == null || text.length() == 0; // string.isEmpty() in Java 6
+    return text == null || text.trim().length() == 0; // string.isEmpty() in Java 6
   }
 
 }

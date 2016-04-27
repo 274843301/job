@@ -13,6 +13,7 @@ import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.FilenameUtils;
 
 import com.github.xsocket.job.parser.Job51ResumeParser;
+import com.github.xsocket.job.parser.LagouPdfResumeParser;
 import com.github.xsocket.job.parser.LagouResumeParser;
 import com.github.xsocket.job.parser.LiepinResumeParser;
 import com.github.xsocket.job.parser.ZhilianEmailResumeParser;
@@ -35,6 +36,7 @@ public class Main {
     PARSERS.add(new LiepinResumeParser());
     PARSERS.add(new ZhilianResumeParser());
     PARSERS.add(ZL_PARSER);
+    PARSERS.add(new LagouPdfResumeParser());
   }
   
   public static void main(String[] args) {
