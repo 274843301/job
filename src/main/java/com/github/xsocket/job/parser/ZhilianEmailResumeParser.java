@@ -10,6 +10,7 @@ import javax.mail.Multipart;
 import javax.mail.Session;
 import javax.mail.internet.MimeMessage;
 
+import org.apache.commons.io.FileUtils;
 import org.apache.http.client.fluent.Request;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
@@ -20,6 +21,7 @@ import com.github.xsocket.job.AbstractResumeParser;
 import com.github.xsocket.job.Resume;
 import com.github.xsocket.job.ResumeParser;
 import com.github.xsocket.job.resume.ZhilianResume;
+import com.github.xsocket.job.util.QuotedPrintableUtils;
 
 /**
  * 智联邮件简历解析工具。
@@ -209,17 +211,28 @@ public class ZhilianEmailResumeParser extends AbstractResumeParser implements Re
     Session mailSession = Session.getDefaultInstance(System.getProperties(), null);
 
     MimeMessage msg = new MimeMessage(mailSession, in);
-    
+
     Multipart part = (Multipart) msg.getContent();
     String html = "";
     for(int i = 0; i < part.getCount(); i++) {
       BodyPart body = part.getBodyPart(i);
-      if(body.getContentType().startsWith("text/html")) {
+      String type = body.getContentType();
+      if(type.startsWith("text/html")) {
         html = body.getContent().toString();
         break;
       }
     }
     in.close();
+    
+    if(html == null || html.length() == 0) {
+      String content = FileUtils.readFileToString(file);
+      final String endFlag = "</html>";
+      int start = content.indexOf("<html");
+      int end = content.indexOf(endFlag);
+      content = content.substring(start, end + endFlag.length());
+      html = QuotedPrintableUtils.decode(content.getBytes(), "gb2312");
+      System.err.println(html);
+    }
     return Jsoup.parse(html);
   }
 }
